@@ -31,18 +31,19 @@ define([
   // Backbone.js Components.
   // --------------------------------------------------------------------------
   var NoteModel = Backbone.Model.extend({
-    urlRoot: "/notes", // :id
     defaults: { title: "", text: "*Add Note!*" }
   });
 
-  // Hack an `id` for fetch routing.
-  var noteModel = new NoteModel({ id: 1 });
-  console.log("BEFORE " + JSON.stringify(noteModel.toJSON()));
-  noteModel
-    .fetch()
-    .done(function () {
-      console.log("AFTER: " + JSON.stringify(noteModel.toJSON()));
-    });
+  var NotesCollection = Backbone.Collection.extend({
+    model: NoteModel,
+    url: "/notes"
+  });
+
+  var notesCollection = new NotesCollection();
+  notesCollection.fetch().done(function () {
+    console.log("Fetched: " +
+                JSON.stringify(notesCollection.toJSON()));
+  });
 
   // --------------------------------------------------------------------------
   // Application Bootstrap
