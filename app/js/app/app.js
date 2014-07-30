@@ -10,18 +10,22 @@
  */
 define([
   "jquery",
+  "underscore",
   "backbone",
 
   // Import and compile a HBS template.
   "hbs!app/templates/note",
+  "hbs!app/templates/notes",
 
   // Polyfill JSON for old browsers.
   "json2",
   "backbone.localStorage"
 ], function (
   $,
+  _,
   Backbone,
-  noteTmpl
+  noteTmpl,
+  notesTmpl
 ) {
   "use strict";
 
@@ -39,18 +43,22 @@ define([
   var notesCollection = new NotesCollection();
   notesCollection.fetch(); // Use existing models!
 
-  var $note = $("<div><h1>My Notes</h1><div id='note' /></div>")
-
+  var $note = $("<div><h1>One Note</h1><div id='note' /></div>");
   var noteModel = notesCollection.at(0);
-  var rendered = noteTmpl(noteModel.toJSON());
-  $note.append(rendered);
+  var renderedNote = noteTmpl(noteModel.toJSON());
+  $note.append(renderedNote);
+
+  var $notes = $("<div><h1>My Notes</h1><div id='notes' /></div>");
+  var renderedNotes = notesTmpl(notesCollection.toJSON());
+  $notes.append(renderedNotes);
 
   // --------------------------------------------------------------------------
   // Application Bootstrap
   // --------------------------------------------------------------------------
   $(function () {
     $("body")
-      .append($note);
+      .append($note)
+      .append($notes);
   });
 });
 
