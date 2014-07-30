@@ -17,6 +17,9 @@ define([
   "hbs!app/templates/note",
   "hbs!app/templates/notes",
 
+  // Dependencies
+  "app/models/note",
+
   // Polyfill JSON for old browsers.
   "json2",
   "backbone.localStorage"
@@ -25,16 +28,14 @@ define([
   _,
   Backbone,
   noteTmpl,
-  notesTmpl
+  notesTmpl,
+  NoteModel
 ) {
   "use strict";
 
   // --------------------------------------------------------------------------
   // Backbone.js Components.
   // --------------------------------------------------------------------------
-  var NoteModel = Backbone.Model.extend({
-    defaults: { title: "", text: "*Add Note!*" }
-  });
   var NotesCollection = Backbone.Collection.extend({
     model: NoteModel,
     localStorage: new Backbone.LocalStorage("bb-col-demo")
