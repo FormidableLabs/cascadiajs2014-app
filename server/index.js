@@ -3,6 +3,12 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   PORT = process.env.PORT || 3000;
 
+// Custom middleware example!
+// app.use(function (req, res, next) {
+//   console.log("HELLO CASCADIAJS - " + req.path);
+//   next();
+// });
+
 // Static routes.
 app.use("/", express["static"]("app"));
 app.use("/app", express["static"]("app"));
