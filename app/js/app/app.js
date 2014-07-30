@@ -19,7 +19,8 @@ define([
   "hbs!app/templates/hello",
 
   // Polyfill JSON for old browsers.
-  "json2"
+  "json2",
+  "backbone.localStorage"
 ], function (
   $,
   Backbone,
@@ -33,17 +34,25 @@ define([
   var NoteModel = Backbone.Model.extend({
     defaults: { title: "", text: "*Add Note!*" }
   });
-
   var NotesCollection = Backbone.Collection.extend({
     model: NoteModel,
-    url: "/notes"
+    localStorage: new Backbone.LocalStorage("bb-col-demo")
   });
 
   var notesCollection = new NotesCollection();
-  notesCollection.fetch().done(function () {
-    console.log("Fetched: " +
-                JSON.stringify(notesCollection.toJSON()));
-  });
+
+  // _.each(["Hi", "Hello", "Hola"], function (msg) {
+  //   notesCollection.create({ title: msg, text: msg });
+  // });
+
+  notesCollection.fetch(); // Use existing models!
+  notesCollection.chain()
+    .filter(function (model) {
+      return /o/.test(model.get("text"));
+    })
+    .each(function (model) {
+      console.log("HAS O: " + JSON.stringify(model.toJSON()));
+    });
 
   // --------------------------------------------------------------------------
   // Application Bootstrap
