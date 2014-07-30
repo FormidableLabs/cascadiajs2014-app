@@ -58,6 +58,18 @@ define([
     }
   });
 
+  var NotesView = Backbone.View.extend({
+    el: "#notes",
+    template: notesTmpl,
+    initialize: function () {
+      if (!this.collection) { throw new Error("COLLECTION!!!!"); }
+      this.listenTo(this.collection, "change", this.render);
+    },
+    render: function () {
+      this.$el.html(this.template(this.collection.toJSON()));
+    }
+  });
+
   // --------------------------------------------------------------------------
   // Application Bootstrap
   // --------------------------------------------------------------------------
@@ -70,6 +82,11 @@ define([
       model: notesCollection.at(0)
     });
     noteView.render();
+
+    var notesView = new NotesView({
+      collection: notesCollection
+    });
+    notesView.render();
 
   });
 });
