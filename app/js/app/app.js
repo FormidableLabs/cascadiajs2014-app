@@ -44,13 +44,19 @@ define([
   notesCollection.fetch(); // Use existing models!
 
   var $note = $("<div><h1>One Note</h1><div id='note' /></div>");
-  var noteModel = notesCollection.at(0);
-  var renderedNote = noteTmpl(noteModel.toJSON());
-  $note.append(renderedNote);
-
   var $notes = $("<div><h1>My Notes</h1><div id='notes' /></div>");
-  var renderedNotes = notesTmpl(notesCollection.toJSON());
-  $notes.append(renderedNotes);
+
+  var NoteView = Backbone.View.extend({
+    el: "#note",
+    template: noteTmpl,
+    initialize: function () {
+      if (!this.model) { throw new Error("MODEL!!!!"); }
+      this.listenTo(this.model, "change", this.render);
+    },
+    render: function () {
+      this.$el.html(this.template(this.model.toJSON()));
+    }
+  });
 
   // --------------------------------------------------------------------------
   // Application Bootstrap
@@ -59,6 +65,12 @@ define([
     $("body")
       .append($note)
       .append($notes);
+
+    var noteView = new NoteView({
+      model: notesCollection.at(0)
+    });
+    noteView.render();
+
   });
 });
 
