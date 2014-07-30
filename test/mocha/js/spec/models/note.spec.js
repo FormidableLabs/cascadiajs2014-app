@@ -1,6 +1,7 @@
 define([
+  "backbone",
   "app/models/note"
-], function (NoteModel) {
+], function (Backbone, NoteModel) {
   describe("app/models/note", function () {
 
     beforeEach(function () {
@@ -10,7 +11,15 @@ define([
       this.model = null;
     });
 
-    it("should have expected defaults");
+    it("is a bb model", function () {
+      expect(this.model)
+        .to.be.an.instanceof(Backbone.Model);
+    });
+
+    it("should have expected defaults", function () {
+      expect(this.model.get("title")).to.equal("");
+      expect(this.model.get("text")).to.contain("Add Note");
+    });
     it("can set the title property");
     it("can set the text property");
   });
